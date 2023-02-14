@@ -1,11 +1,11 @@
 import 'zone.js/node';
 
-import { APP_BASE_HREF } from '@angular/common';
 import { ngExpressEngine } from '@nguniversal/express-engine';
 import * as express from 'express';
 import { existsSync } from 'fs';
 import { join } from 'path';
 
+import { APP_BASE_HREF } from '@angular/common';
 import { AppServerModule } from './src/main.server';
 
 // The Express app is exported so that it can be used by serverless Functions.
@@ -22,12 +22,15 @@ export function app(): express.Express {
   server.set('view engine', 'html');
   server.set('views', distFolder);
 
-  // Example Express Rest API endpoints
-  // server.get('/api/**', (req, res) => { });
   // Serve static files from /browser
   server.get('*.*', express.static(distFolder, {
     maxAge: '1y'
   }));
+
+  // Example Express Rest API endpoints
+  server.get('/api/**', (req, res) => {
+    res.status(200).json('to be implemented...')
+  })
 
   // All regular routes use the Universal engine
   server.get('*', (req, res) => {
